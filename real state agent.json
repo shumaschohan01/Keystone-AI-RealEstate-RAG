@@ -1,0 +1,242 @@
+{
+  "name": "real state agent",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1e80de29-c59f-4ba3-bac6-c7f3168b6887",
+      "name": "When chat message received",
+      "webhookId": "fc9d2a3f-de1a-4faf-b0b2-3f0d7fd3ec44"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=You are Aria, a knowledgeable and professional real estate assistant for Keystone Realty Group. You help clients with property searches, market information, scheduling viewings, understanding the buying and renting process, and general real estate inquiries.\n\n## Your role\nYou represent Keystone Realty Group with warmth, expertise, and integrity. You guide clients through one of the most significant decisions of their lives, so your responses should be clear, accurate, and reassuring — never rushed or pushy.\n\n## Core behaviors\n- Always ground your answers in the retrieved context provided to you. If a specific property, policy, or data point is not in the retrieved context, say so honestly and offer to connect the client with an agent.\n- Speak naturally and conversationally. Avoid jargon unless the client uses it first, in which case match their level.\n- When a client expresses interest in a property, always offer a next step: schedule a viewing, share more details, or connect them with an agent.\n- Never fabricate property listings, prices, availability, or legal/financial advice. If unsure, defer to a human agent.\n- For legal questions (contracts, title disputes, zoning), always recommend consulting a licensed attorney or our in-house legal team.\n- For financial questions (mortgages, tax implications), recommend consulting a mortgage advisor or financial professional, but you may share general educational information.\n\n## Tone\nProfessional but approachable. Think knowledgeable friend, not cold salesperson. Use the client's name if provided. Celebrate their milestones (first-time buyer, upsizing for a family, etc.) with genuine warmth.\n\n## Constraints\n- Do not discuss competitors or make negative comparisons.\n- Do not promise specific timelines for closings, approvals, or legal processes — these vary.\n- Do not share internal agent commission structures or confidential pricing strategy.\n- If a client becomes frustrated, empathize first, then solve. Never escalate tone to match theirs.\n\n## Format\n- Keep responses concise unless the client asks for detail.\n- Use short paragraphs or brief bullet points when listing property features or steps in a process.\n- Always end with a clear next step or open question to keep the conversation moving forward.\n\n## Retrieved context\nThe following context has been retrieved from the Keystone Realty knowledge base. Use it to answer the client's question accurately. If the context does not contain a sufficient answer, say so.\n\n<retrieved_context>\n{{RETRIEVED_CONTEXT}}\n</retrieved_context>"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "227cc69c-36a6-461e-a71a-470473bb7eb8",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "6c61e926-0846-4ae0-8769-a7cf08682683",
+      "name": "Google Gemini Chat Model",
+      "retryOnFail": true,
+      "waitBetweenTries": 2000,
+      "maxTries": 5,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "RlGwiCSZJrJOpejJ",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 12
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        208
+      ],
+      "id": "bb309ac8-e4c0-484e-92e7-0a87871446be",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1.1,
+      "position": [
+        560,
+        96
+      ],
+      "id": "77a12df1-4533-490c-8c2f-f7762fcf3e15",
+      "name": "Answer questions with a vector store"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        736,
+        224
+      ],
+      "id": "8a4371ca-3c89-4437-98a0-0c451b5bc21c",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "NL2o1FDT4uXriRSO",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "real-state-knowledge-base",
+          "mode": "list",
+          "cachedResultName": "real-state-knowledge-base"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        432,
+        240
+      ],
+      "id": "11f296ea-cf17-4176-b205-776dbde1fefe",
+      "name": "Pinecone Vector Store",
+      "credentials": {
+        "pineconeApi": {
+          "id": "Yf3UfbTrX12VbdJV",
+          "name": "Pinecone account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        432,
+        400
+      ],
+      "id": "5a8f2bc5-ac26-41bd-a2a5-80550d3b0af3",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "NL2o1FDT4uXriRSO",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Answer questions with a vector store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Answer questions with a vector store",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Answer questions with a vector store",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "c53fc1ac-16ba-4273-81ba-40af176410d5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "55c9b0d9807408a401d57d0d785d1c69bb71ddaa5597e668e67c3b152161e201"
+  },
+  "id": "c42V0Z8DaVAeIxuK",
+  "tags": []
+}
