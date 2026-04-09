@@ -25,7 +25,8 @@ if "messages" not in st.session_state:
 with st.sidebar:
     st.title("🏠 Keystone Realty")
     st.markdown("### FYP Project: RAG AI Assistant")
-    st.info("Developed by: SHUMAS CHOHAN\n\nBuilt with: n8n, Pinecone, Vapi.")
+    st.info("An AI-driven real estate assistant using RAG architecture to deliver factual, hallucination-free property data from a private knowledge base.
+    \n\nDeveloped by: SHUMAS CHOHAN")
     if st.button("Clear Conversation"):
         st.session_state.messages = []
         st.rerun()
