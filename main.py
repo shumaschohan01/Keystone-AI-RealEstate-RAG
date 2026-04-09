@@ -4,7 +4,7 @@ import time
 
 # --- CONFIGURATION ---
 # Replace with your n8n PRODUCTION Webhook URL
-N8N_WEBHOOK_URL = "https://shumas.app.n8n.cloud/webhook/chat-input"
+N8N_WEBHOOK_URL = "https://shumas.app.n8n.cloud/webhook-test/realstate_chatbot"
 
 st.set_page_config(page_title="Keystone AI Assistant", page_icon="🏠", layout="centered")
 
